@@ -1,10 +1,18 @@
-import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Table, TableRow, TableCell, WidthType, BorderStyle } from "docx";
+import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType } from "docx";
 import { writeFileSync } from "fs";
 
 const h1 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_1, spacing: { before: 600, after: 200 } });
 const h2 = (text) => new Paragraph({ text, heading: HeadingLevel.HEADING_2, spacing: { before: 400, after: 150 } });
 const body = (text, after = 200) => new Paragraph({ text, spacing: { after } });
-const blank = () => new Paragraph({ text: "", spacing: { after: 100 } });
+const bold = (text, after = 200) => new Paragraph({
+  children: [new TextRun({ text, bold: true })],
+  spacing: { after },
+});
+const center_bold = (text, after = 200) => new Paragraph({
+  children: [new TextRun({ text, bold: true })],
+  alignment: AlignmentType.CENTER,
+  spacing: { after },
+});
 
 const doc = new Document({
   styles: {
@@ -24,29 +32,63 @@ const doc = new Document({
       new Paragraph({
         text: "リサーチ → コンセプト → 目次 → 本文 → テキスト化 → 有料設定 → SNS告知",
         alignment: AlignmentType.CENTER,
+        spacing: { after: 200 },
+      }),
+      new Paragraph({
+        text: "らっこ式フレームワーク統合版",
+        alignment: AlignmentType.CENTER,
         spacing: { after: 600 },
       }),
 
+      // 全体方針
+      h1("全体方針｜らっこ式60〜70点ルール"),
+      bold("完璧を求めない。60〜70点の記事を1ヶ月テスト発信して、市場の反応を見てから改善する。"),
+      body("最初から100点を目指すと発信できない。まず出して、反応をデータにする。", 400),
+
       // 全体フロー
       h1("全体フロー"),
-      body("STEP1  市場調査リサーチ"),
-      body("STEP2  コンセプト整理"),
+      body("STEP1  市場調査リサーチ（ジャンル選定3要素で評価）"),
+      body("STEP2  コンセプト整理（三大欲求×HARMの法則）"),
       body("STEP3  目次作成"),
       body("STEP4  本文執筆（はじめに・第1〜6章・おわりに）"),
       body("STEP5  Wordファイル出力"),
       body("STEP6  有料設定ライン・価格設定"),
-      body("STEP7  SNS告知文作成・投稿", 400),
+      body("STEP7  SNS告知文作成・投稿（X→note順序を守る）", 400),
 
       // STEP1
       h1("STEP1｜市場調査リサーチ"),
+
+      h2("らっこ式：ジャンル選定3要素（リサーチ前に必ず評価）"),
+      bold("売れるジャンルの条件：市場の大きさ × 悩みの深さ × 悩みの緊急度"),
+      body("・市場の大きさ　：そのジャンルに悩む人が多いか（Xで投稿数・フォロワー数を確認）"),
+      body("・悩みの深さ　　：解決したくて夜も眠れないレベルか"),
+      body("・悩みの緊急度　：今すぐ解決したいか・後回しにできないか", 300),
+
+      h2("ジャンル別収益規模の目安"),
+      body("お金・副業　　：月間売上大、価格1,000〜5,000円、緊急度高・競合多"),
+      body("健康・ダイエット：月間売上大、価格500〜3,000円、需要安定・悩み深い"),
+      body("恋愛・結婚　　：月間売上中〜大、価格1,000〜3,000円、感情購買・拡散しやすい"),
+      body("子育て・教育　：月間売上中、価格500〜2,000円、ママ層の購買力高い"),
+      body("キャリア・転職：月間売上中、価格1,000〜3,000円、決断期に集中購買"),
+      body("趣味・ライフスタイル：月間売上小〜中、価格300〜1,500円、ファン化しやすい", 300),
+
+      h2("らっこ式：HARMの法則（インサイト分析の軸）"),
+      body("ターゲットの悩みをこの4軸で分類して深掘りする。"),
+      body("H（Health）　：身体・精神・美容の悩み　→「疲れが取れない」「老けた気がする」"),
+      body("A（Ambition）：成長・スキル・将来への不安→「AIに仕事を奪われる」「このままでいいのか」"),
+      body("R（Relation）：家族・職場・恋愛の悩み　→「子どもと話が噛み合わない」「夫婦の温度差」"),
+      body("M（Money）　：収入・節約・資産形成　　→「収入が増えない」「老後が不安」", 200),
+      body("※ ターゲットの本音の悩みはたいてい複数の軸にまたがる。", 300),
+
       h2("確認する4つの条件（必ず順番に聞く）"),
       body("① 調査テーマ　　：AI副業／思考法 など"),
       body("② ターゲット層　：主婦／20代会社員／フリーランス など"),
       body("③ 販売形態　　　：eBook／テンプレート・ツール／オンライン講座"),
       body("④ 重点項目　　　：インサイト深掘り／競合分析重視／ブルーオーシャン発見", 300),
+
       h2("出力する4項目"),
       body("1. ターゲットの深い悩み（インサイト）× 5つ"),
-      body("   └ 表層の悩みではなく「夜も眠れない本音の動機」"),
+      body("   └ HARMの法則で分類して「夜も眠れない本音の動機」を抽出"),
       body("2. 競合コンテンツの分析 × 3件"),
       body("   └ タイトル・価格帯・訴求ポイント・弱点"),
       body("3. 市場の空白（ブルーオーシャン）× 3つ"),
@@ -56,11 +98,23 @@ const doc = new Document({
 
       // STEP2
       h1("STEP2｜コンセプト整理"),
+
+      h2("らっこ式：三大欲求（コンセプトの根本に置く）"),
+      bold("人が情報にお金を払う動機は3つだけ。コンセプトをこの欲求に接続する。"),
+      body("繁殖欲求：子どもを守りたい・家族を守りたい"),
+      body("  →「子どもの未来を守る」「家族が安心できる」"),
+      body("承認欲求：認められたい・尊敬されたい・自己成長"),
+      body("  →「周りに差をつける」「一歩先を行く親になる」"),
+      body("金銭欲求：お金を増やしたい・損したくない"),
+      body("  →「月1万円の副収入」「AI時代に稼ぐ方法」", 200),
+      body("※ タイトルとキャッチコピーに最低1つの欲求を必ず組み込む", 300),
+
       h2("出力する4要素"),
-      body("・タイトル案　　　　：5本（パワーワードを2つ以上含める）"),
+      body("・タイトル案　　　　：5本（パワーワードを2つ以上＋三大欲求を1つ以上含める）"),
       body("・解決する悩み　　　：インサイトから抽出した本音の問題"),
       body("・どうなれるか　　　：記事を読んだ後の読者の変化"),
       body("・独自の売り　　　　：競合にない切り口・市場の空白", 300),
+
       h2("タイトル作成の公式"),
       new Paragraph({
         children: [new TextRun({ text: "【ターゲット】＋【パワーワード①】＋【パワーワード②】", bold: true })],
@@ -124,11 +178,7 @@ const doc = new Document({
       body("【無料】はじめに          ← 共感・フック"),
       body("【無料】第1章 問題提起    ← 「私のことだ」と思わせる"),
       body("【無料】第2章 憧れ（前半）← 「こうなりたい」を見せる"),
-      new Paragraph({
-        children: [new TextRun({ text: "━━━━━━ ここから有料 ━━━━━━", bold: true })],
-        alignment: AlignmentType.CENTER,
-        spacing: { before: 200, after: 200 },
-      }),
+      center_bold("━━━━━━ ここから有料 ━━━━━━", 200),
       body("【有料】第2章 憧れ（後半）← 具体的な変化の姿"),
       body("【有料】第3章 解決策      ← 本書の核心（絶対有料）"),
       body("【有料】第4章〜第6章・おわりに", 300),
@@ -143,6 +193,15 @@ const doc = new Document({
 
       // STEP7
       h1("STEP7｜SNS告知文"),
+
+      h2("らっこ式：X→note順序の原則"),
+      bold("「Xで読者を集めてからnoteを売る」がらっこ式の基本戦略。"),
+      body("❌ NG：noteを公開してからXで宣伝する（読者ゼロからスタート）"),
+      body("✅ OK：Xで発信して読者を増やしてからnoteを出す（温まった読者に届ける）", 200),
+      body("理想の導線：Xで価値提供 → フォロワーが「この人の有料コンテンツも読みたい」と思う"),
+      body("           → noteを公開して告知（信頼がある状態）→ 初速で購入・レビュー", 200),
+      body("※ Xフォロワー500〜1,000人いれば初速で10〜20件購入が見込める", 300),
+
       h2("X投稿パターン別使い分け"),
       body("共感型　　　：公開初日　　→「私のことだ」で拡散"),
       body("問題提起型　：3日後　　　→ 危機感を煽って購買促進"),
@@ -163,15 +222,16 @@ const doc = new Document({
       // チェックリスト
       h1("チェックリスト（次回記事用）"),
       h2("制作フェーズ"),
-      body("□ STEP1：テーマ→ターゲット→販売形態→重点項目の順に確認してからリサーチ"),
-      body("□ STEP2：パワーワードを2〜3個選んでタイトルに組み込む"),
+      body("□ STEP1：ジャンル選定3要素で評価 → 4条件を順番に確認してからリサーチ"),
+      body("□ STEP2：HARMの法則でインサイト分析 → 三大欲求をタイトルに組み込む"),
       body("□ STEP3：タイトル確定後に目次を作成"),
       body("□ STEP4：はじめに→各章→おわりにの順で1章ずつ確認しながら執筆"),
       body("□ STEP5：create_article.mjsを新記事に書き換えてからnode実行", 300),
       h2("販売フェーズ"),
       body("□ STEP6：第2章の途中に有料ラインを設定／初速980円で公開"),
-      body("□ STEP7：公開初日にX・Instagram投稿"),
+      body("□ STEP7：Xで発信して読者を温めてからnote告知（X→note順序）"),
       body("□ レビュー5件集まったら1,980円に値上げ＆告知投稿"),
+      body("□ 60〜70点で出して、1ヶ月後に反応を見て改善する", 400),
     ],
   }],
 });
